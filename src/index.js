@@ -12,7 +12,8 @@ import {
   Route,
 } from "react-router-dom";
 import Products from './components/content/products/products';
-
+import EditProducts from './components/content/products/editProducts';
+import DetailProducts from './components/content/products/detailProducts';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
@@ -21,7 +22,9 @@ root.render(
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/Users" element={<User />} />
-        <Route path="/Products" element={<Products />} />
+      <Route path="/Products" element={<Products />} />
+      <Route path="/Products/editProducts/:id" element={<EditProducts />} />
+      <Route path ="Products/detailProducts/:id" element={< DetailProducts />} />
     </Routes>
   </BrowserRouter>
   </React.StrictMode>
