@@ -1,28 +1,26 @@
 import { Container } from "react-bootstrap";
 import { Table as Tables, Spinner, Badge } from "react-bootstrap";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { userList, userloadng } from "../../../Redux/Action/userAction";
 const User = () => {
-  const [user, setUser] = useState([]);
-  const [isLoading, setLoading] = useState(false);
-
+  const users = useSelector((state) => state.user.user);
+  const loading = useSelector((state) => state.user.loading);
+  const dispatch = useDispatch();
   useEffect(() => {
-    setLoading(true);
+    dispatch(userloadng());
     fetch("https://fakestoreapi.com/users/")
       .then((res) => res.json())
       .then((result) => {
-        setUser(result);
-
-        setLoading(false);
+        dispatch(userList(result));
       });
   }, []);
-
   return (
     <Container className="mt-4">
-      
-        <h3 >
-          User List &nbsp;<i className="fa-solid fa-user"></i>
-        </h3>
-    
+      <h3>
+        User List &nbsp;<i className="fa-solid fa-user"></i>
+      </h3>
+
       <Tables responsive="sm">
         <thead>
           <tr>
@@ -34,14 +32,14 @@ const User = () => {
           </tr>
         </thead>
         <tbody>
-          {isLoading ? (
+          {loading ? (
             <tr>
               <td colSpan="5" className="text-center">
                 <Spinner animation="border" />
               </td>
             </tr>
           ) : (
-            user.map((item, i) => {
+            users.map((item, i) => {
               let randx = Math.floor(Math.random() * 3);
               let status = "";
               if (randx === 0) {

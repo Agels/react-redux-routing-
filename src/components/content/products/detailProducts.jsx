@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import {
   Card,
   Container,
@@ -7,27 +7,30 @@ import {
   Row,
   Col,
 } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
-
+import { productloading, productDetail} from '../../../Redux/Action/productAction';
 const DetailProducts = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [isLoading, setLoading] = useState(false);
-  const [products, setProducts] = useState({});
+
+  const products = useSelector((state) => state.product.productDetail);
+  const loading = useSelector((state) => state.product.loading)
+  const dispatch = useDispatch();
   useEffect(() => {
-    setLoading(true);
+
+    dispatch(productloading());
     fetch(`https://fakestoreapi.com/Products/${id}`)
       .then((res) => res.json())
       .then((result) => {
-        setProducts(result);
-        setLoading(false);
+        dispatch(productDetail(result));
       });
   }, [id]);
   return (
     <Container className="mt-5">
       {/* loading */}
 
-      {isLoading ? (
+      {loading ? (
         <Row>
           <Col>
             <Card style={{ width: "36rem" }}>

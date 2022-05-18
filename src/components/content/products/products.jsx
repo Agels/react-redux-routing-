@@ -2,20 +2,23 @@ import { Container } from "react-bootstrap";
 import { Table as Tables } from "react-bootstrap";
 import { Spinner, Button } from "react-bootstrap";
 import { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { productloading, productList} from '../../../Redux/Action/productAction';
 import { Link } from "react-router-dom";
 const Products = () => {
-  const [products, setProducts] = useState([]);
-  const [isLoading, setLoading] = useState(false);
+  const products = useSelector((state) => state.product);
+  const dispatch = useDispatch();
+
   useEffect(() => {
-    setLoading(true);
+    dispatch(productloading())
     fetch("https://fakestoreapi.com/products?limit=10")
       .then((res) => res.json())
       .then((results) => {
-        setProducts(results);
-        setLoading(false);
+      dispatch(productList(results));
       });
   }, []);
   return (
+    
     <Container className="mt-4">
       <h3>
         Products List &nbsp;<i className="fa-solid fa-bag-shopping"></i>
@@ -32,15 +35,16 @@ const Products = () => {
             <th>actions</th>
           </tr>
         </thead>
+        {/* {console.log(products)} */}
         <tbody>
-          {isLoading ? (
+          {products.loading ? (
             <tr>
               <td colSpan="7" className="text-center">
                 <Spinner animation="border" />
               </td>
             </tr>
           ) : (
-            products.map((item, i) => {
+            products.product.map((item, i) => {
               return (
                 <tr key={i}>
                   <td>{item.id}</td>
